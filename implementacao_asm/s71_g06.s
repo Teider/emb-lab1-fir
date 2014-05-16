@@ -2,16 +2,11 @@
 
   EXPORT        fir_proc
 
-  PUBLIC __iar_program_start
-  
-  Section .intvec : CODE(2)
-  
-__iar_program_start
-
   Section .text : CODE(2)
 
 fir_proc
-    POP         {R4} ;get the output address from the stack and store on R4
+    PUSH        {R4-R11} ;store the values of R4-R11
+    LDR         R4, [SP, #32] ;get the output address from the stack and store on R4
     SUB         R1, R1, R3 ;R1 = size_in - size_coef
     ADD         R1, R1, #1 ;R1 = size_in - (size_coef - 1)
     MOV         R10, R1 ;copy the value for later
@@ -27,13 +22,15 @@ coef_loop
     MLA         R7, R8, R9, R7 ;multiply and accumulate (y[n] += x[n-k] * h[k])
     ADD         R5, R5, #1 ;k = k + 1
     SUB         R6, R6, #1 ;-k = -k - 1
-    CMP         R5, R3 ;test if all coeficients have been calculated
+    CMP         R3, R5 ;test if all coeficients have been calculated
     BNE         coef_loop ;if R5 != R3, continue the loop
     STR         R7, [R4], #4 ;Store the result in the output address and advance the output address by one
     ADD         R0, R0, #4 ;Advance the input by one
-    SUBS        R1, R1, #-1 ;Decrease the number of items to be processed by one
+    SUBS        R1, R1, #1 ;Decrease the number of items to be processed by one
     BNE         fir_loop ;Test if all items were processed
 ; function finish
     MOV         R0, R10 ;Store the number of items processed as the result value
+    POP         {R4-R11} ;Restore the values of R4-R11
+    BX          LR ;return from the procedure
    
     END
