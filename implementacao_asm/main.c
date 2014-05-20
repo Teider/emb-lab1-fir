@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define SIZE_IN 4000
-#define SIZE_COEF 5
-#define PRECISION 10 //The precision is binary (i.e. 2^PRECISION values after the comma are considered)
+//Debug options (1=activated, 0=deactivated)
+#define DEBUG 0 //misc debug messages
+#define DEBUG_C 1 //comparison with C FIR function
+#define PRINT_MATLAB 1 //Matlab output
 
-#define DEBUG 0
-#define DEBUG_C 1
-#define PRINT_MATLAB 0
+
+#define SIZE_IN 1000
+#define SIZE_COEF 5
+#define PRECISION 12 //The precision is binary (i.e. 2^PRECISION values after the comma are considered)
 
 //Assembly function for the FIR filter
 extern int fir_proc(int* s_in, int size_in, int* coef, int size_coef, int* s_out);
@@ -38,9 +40,11 @@ int main(int argc, char* argv){
     //
     if(PRINT_MATLAB) printf("s_in=[");
     for (int i = 0; i < SIZE_IN; i++){
-        float value = i; //floating-point value
-        s_in[i] = (int) value << PRECISION; //fixed-point value (One 'PRECISION' more)
+        double value = (double) i / 10; //floating-point value
+        s_in[i] = (int) round(value * pow(2,PRECISION)); //fixed-point value (One 'PRECISION' more)
         if(PRINT_MATLAB) printf("%f ", value);
+        if(DEBUG) printf("%f/", value);     
+        if(DEBUG) printf("%f/", value * pow(2,PRECISION));  
         if(DEBUG) printf("%d ", s_in[i]);                
     }
     if(PRINT_MATLAB) printf("];");
@@ -69,7 +73,7 @@ int main(int argc, char* argv){
         that the multiplication of 2 fixed-point numbers generates 
         another one with double the original precision).*/
         int fixed_point_value = s_out[i] >> PRECISION; //(One 'PRECISION' less)
-        float floating_point_value = (float) fixed_point_value / (float) pow(2, PRECISION); //(One 'PRECISION' less)
+        double floating_point_value = (double) fixed_point_value / (double) pow(2, PRECISION); //(One 'PRECISION' less)
         if(DEBUG) printf("%d/",s_out[i]);
         if(DEBUG) printf("%d/",fixed_point_value);
         /*Prints the real value of the result.*/
@@ -93,6 +97,4 @@ int main(int argc, char* argv){
             }
         }
     }
-    
-    
 }
