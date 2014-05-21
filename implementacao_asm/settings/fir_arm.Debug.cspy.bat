@@ -19,6 +19,6 @@
 @REM 
 
 
-"C:\Program Files\IAR Systems\Embedded Workbench 7.0\common\bin\cspybat" "C:\Program Files\IAR Systems\Embedded Workbench 7.0\arm\bin\armproc.dll" "C:\Program Files\IAR Systems\Embedded Workbench 7.0\arm\bin\armsim2.dll"  %1 --plugin "C:\Program Files\IAR Systems\Embedded Workbench 7.0\arm\bin\armbat.dll" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "--semihosting" "--multicore_nr_of_cores=1" 
+"F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\common\bin\cspybat" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armproc.dll" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armsim2.dll"  %1 --plugin "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armbat.dll" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "--semihosting" "--multicore_nr_of_cores=1" 
 
 
